@@ -1,0 +1,1252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>SyncTech CRM Ops</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Technical support desk for GoHighLevel agency owners: live chat, technical support, onboarding, social media, phone & A2P, and custom builds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky header; split hero with a live ops console; metric strip; tabbed service explorer; plan finder feeding three pricing tiers; compare table; timeline; FAQ; contact. */
+/* SyncTech brand: one deliberate dark theme for every viewer.
+   Graphite-navy surfaces, signal blue for actions, cyan for data and live states. */
+:root {
+  --bg: #0A0E16;
+  --surface: #0F1520;
+  --surface-2: #151D2B;
+  --ink: #E9EEF6;
+  --muted: #9EAABD;
+  --line: #232D3E;
+  --accent: #5B93FF;
+  --accent-ink: #06101F;
+  --accent-soft: #14213A;
+  --cyan: #2DD4E8;
+  --ok: #34D399;
+  --warn: #FBBF24;
+  --danger: #FF8080;
+  --grid: rgba(91, 147, 255, .06);
+  --con-bg: #070A11;
+  --con-line: #1D2636;
+  --con-ink: #E3E9F3;
+  --con-muted: #93A0B5;
+  --con-cyan: #2DD4E8;
+  --con-ok: #34D399;
+  --con-warn: #FBBF24;
+  --con-blue: #8AB0FF;
+  --shadow: 0 1px 2px rgba(0,0,0,.5), 0 18px 40px -18px rgba(0,0,0,.85);
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --r: 12px;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3, h4 { margin: 0; line-height: 1.1; letter-spacing: -0.025em; text-wrap: balance; font-weight: 700; }
+h1 { font-size: clamp(2.3rem, 5.4vw, 4rem); font-weight: 800; letter-spacing: -0.035em; }
+h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
+h3 { font-size: 1.2rem; letter-spacing: -0.015em; }
+h1, h2, h3, h4, .brand, .amount b, .metric b, .finder-out .plan, .od-total b, .addon-price b { font-family: var(--display); }
+h1 { letter-spacing: -0.03em; }
+body { background: radial-gradient(1200px 600px at 85% -10%, rgba(91, 147, 255, .10), transparent 60%), var(--bg); line-height: 1.65; }
+p { margin: 0; }
+a { color: inherit; }
+.mono { font-family: var(--mono); }
+.tag { font-family: var(--mono); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+.tag::before { content: ""; width: 14px; height: 1.5px; background: currentColor; }
+.lede { color: var(--muted); font-size: 1.1rem; max-width: 60ch; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: 600 .95rem/1 var(--sans); text-decoration: none; padding: 14px 20px; border-radius: 10px; border: 1px solid transparent; cursor: pointer; transition: transform .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease; white-space: nowrap; }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); box-shadow: 0 6px 20px -8px var(--accent); }
+.btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--muted); }
+.btn svg { width: 16px; height: 16px; }
+
+/* Header */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bg); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; text-decoration: none; letter-spacing: -0.03em; }
+.brand-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--cyan)); display: grid; place-items: center; flex: none; }
+.brand-mark span { width: 12px; height: 3px; border-radius: 2px; background: var(--accent-ink); box-shadow: 0 -5px 0 var(--accent-ink), 0 5px 0 var(--accent-ink); }
+.brand small { font-family: var(--mono); font-weight: 500; font-size: .68rem; color: var(--muted); border: 1px solid var(--line); padding: 2px 6px; border-radius: 5px; letter-spacing: 0; }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a:not(.btn) { text-decoration: none; color: var(--muted); font-weight: 500; font-size: .93rem; padding: 8px 12px; border-radius: 8px; }
+.nav a:not(.btn):hover { color: var(--ink); background: var(--surface-2); }
+.nav .btn { margin-left: 8px; padding: 10px 16px; }
+.menu-btn { display: none; background: var(--surface); border: 1px solid var(--line); border-radius: 9px; width: 42px; height: 42px; cursor: pointer; color: var(--ink); place-items: center; }
+.menu-btn svg { width: 20px; height: 20px; }
+@media (max-width: 1000px) {
+  .menu-btn { display: grid; }
+  .nav { position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 2px; background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: var(--shadow); padding: 12px max(20px, env(safe-area-inset-right, 0px)) 20px max(20px, env(safe-area-inset-left, 0px)); }
+  .nav:not(.open) { display: none; }
+  .nav a:not(.btn) { padding: 12px; font-size: 1rem; }
+  .nav .btn { margin: 8px 0 0; }
+}
+
+/* Hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, #000 30%, transparent 75%); pointer-events: none; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; padding-block: 72px 84px; }
+.hero-copy { display: grid; gap: 24px; }
+.status-pill { justify-self: start; display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: .78rem; padding: 6px 12px 6px 8px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; color: var(--muted); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); animation: ping 2s ease-out infinite; flex: none; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 55%, transparent); } 100% { box-shadow: 0 0 0 9px transparent; } }
+.rotator { display: inline-block; color: var(--accent); position: relative; }
+.rotator .caret { display: inline-block; width: .08em; height: .9em; background: var(--cyan); margin-left: .06em; vertical-align: -0.08em; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.checks { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: .9rem; color: var(--muted); padding: 0; margin: 0; list-style: none; }
+.checks li { display: flex; align-items: center; gap: 8px; }
+.checks svg { width: 16px; height: 16px; color: var(--ok); flex: none; }
+@media (max-width: 960px) { .hero .wrap { grid-template-columns: 1fr; gap: 44px; padding-block: 48px 60px; } }
+
+/* Console */
+.console { background: var(--con-bg); color: var(--con-ink); border: 1px solid var(--con-line); border-radius: 14px; box-shadow: 0 30px 70px -30px rgba(5, 10, 25, .65); overflow: hidden; font-family: var(--mono); font-size: .8rem; min-width: 0; animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+.con-bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--con-line); }
+.con-lights { display: flex; gap: 6px; }
+.con-lights i { width: 10px; height: 10px; border-radius: 50%; background: var(--con-line); display: block; }
+.con-title { color: var(--con-muted); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.con-live { color: var(--con-ok); display: flex; align-items: center; gap: 6px; }
+.con-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--con-ok); animation: blink 1.4s steps(1) infinite; }
+.con-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--con-line); }
+.con-stat { padding: 14px 16px; display: grid; gap: 2px; }
+.con-stat + .con-stat { border-left: 1px solid var(--con-line); }
+.con-stat span { color: var(--con-muted); font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+.con-stat b { font-size: 1.25rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--con-ink); }
+.con-stat b em { font-style: normal; color: var(--con-ok); font-size: .75rem; margin-left: 4px; }
+.spark { display: block; width: 100%; height: 22px; margin-top: 4px; }
+.feed { list-style: none; margin: 0; padding: 6px 0; min-height: 252px; }
+.feed li { display: grid; grid-template-columns: 58px 1fr auto; gap: 12px; align-items: center; padding: 9px 16px; border-bottom: 1px dashed var(--con-line); }
+.feed li:last-child { border-bottom: 0; }
+.feed li.new { animation: slidein .5s ease both; }
+@keyframes slidein { from { transform: translateY(-8px); background: rgba(69, 212, 242, .08); } to { transform: none; background: transparent; } }
+.feed time { color: var(--con-muted); font-variant-numeric: tabular-nums; }
+.feed .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.feed .txt b { color: var(--con-blue); font-weight: 500; }
+.lvl { font-size: .68rem; padding: 2px 7px; border-radius: 5px; border: 1px solid currentColor; white-space: nowrap; }
+.lvl.ok { color: var(--con-ok); } .lvl.warn { color: var(--con-warn); } .lvl.info { color: var(--con-cyan); }
+.con-foot { padding: 10px 16px; border-top: 1px solid var(--con-line); color: var(--con-muted); font-size: .7rem; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+@media (max-width: 480px) { .feed li { grid-template-columns: 1fr auto; } .feed time { display: none; } .con-stat { padding: 12px 10px; } .con-stat b { font-size: 1.05rem; } }
+
+/* Sections */
+section.block > .wrap { padding-block: 96px; display: grid; gap: 48px; }
+.head { display: grid; gap: 14px; max-width: 760px; }
+.head.split { max-width: none; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px; }
+@media (max-width: 760px) { section.block > .wrap { padding-block: 64px; gap: 36px; } .head.split { grid-template-columns: 1fr; } }
+
+/* Metrics strip */
+.metrics { border-bottom: 1px solid var(--line); background: var(--surface); }
+.metrics .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.metric { padding: 28px 24px; display: grid; gap: 4px; }
+.metric + .metric { border-left: 1px solid var(--line); }
+.metric b { font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.metric span { color: var(--muted); font-size: .88rem; }
+@media (max-width: 760px) { .metrics .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .metric:nth-child(3) { border-left: 0; } .metric:nth-child(n+3) { border-top: 1px solid var(--line); } .metric { padding: 22px 12px; } }
+
+/* Service explorer */
+.explorer { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; align-items: start; }
+.tabs { display: grid; gap: 6px; }
+.tab { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; text-align: left; padding: 12px 14px; border: 1px solid transparent; border-radius: 11px; background: transparent; color: var(--muted); font: 600 .97rem/1.25 var(--sans); cursor: pointer; transition: background-color .15s, border-color .15s, color .15s; }
+.tab small { display: block; font: 400 .78rem/1.3 var(--mono); color: var(--muted); margin-top: 3px; }
+.tab:hover { background: var(--surface); color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--surface); border-color: var(--line); color: var(--ink); box-shadow: var(--shadow); }
+.ico { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-2); color: var(--muted); transition: background-color .15s, color .15s; }
+.tab[aria-selected="true"] .ico { background: var(--accent); color: var(--accent-ink); }
+.ico svg { width: 19px; height: 19px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 36px; display: grid; gap: 28px; min-width: 0; }
+.panel[hidden] { display: none; }
+.panel.show { animation: fadeup .35s ease both; }
+@keyframes fadeup { from { transform: translateY(6px); } to { transform: none; } }
+.panel-top { display: grid; gap: 12px; }
+.panel-top p { color: var(--muted); font-size: 1.05rem; max-width: 62ch; }
+.panel-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; }
+.deliver { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.deliver li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; }
+.deliver svg { width: 18px; height: 18px; color: var(--accent); margin-top: 3px; }
+.spec { border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); font-family: var(--mono); font-size: .8rem; align-self: start; }
+.spec div { display: flex; justify-content: space-between; gap: 12px; padding: 11px 14px; }
+.spec div + div { border-top: 1px solid var(--line); }
+.spec dt { color: var(--muted); }
+.spec dd { margin: 0; text-align: right; font-weight: 500; }
+.spec dl { margin: 0; }
+@media (max-width: 960px) {
+  .explorer { grid-template-columns: 1fr; }
+  .tabs { grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }
+  .tab { grid-template-columns: 30px auto; padding: 9px 14px 9px 9px; }
+  .tab small { display: none; }
+  .ico { width: 30px; height: 30px; border-radius: 8px; }
+  .ico svg { width: 16px; height: 16px; }
+  .panel { padding: 24px 20px; }
+  .panel-grid { grid-template-columns: 1fr; }
+}
+
+/* Plan finder */
+#pricing { background: var(--surface); border-block: 1px solid var(--line); }
+.finder { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--bg); }
+.finder-in { padding: 28px; display: grid; gap: 24px; }
+.finder-out { padding: 28px; background: linear-gradient(160deg, var(--accent-soft), var(--con-bg)); color: var(--ink); border-left: 1px solid var(--line); display: grid; gap: 14px; align-content: center; }
+.finder-out .k { font-family: var(--mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.finder-out .plan { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.finder-out .plan span { font-family: var(--mono); font-size: 1rem; font-weight: 500; color: var(--cyan); letter-spacing: 0; margin-left: 8px; }
+.finder-out ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: .92rem; color: var(--ink); }
+.finder-out li::before { content: "→ "; font-family: var(--mono); color: var(--cyan); }
+.finder-out .btn { justify-self: start; background: var(--cyan); color: #04121A; margin-top: 6px; }
+.field { display: grid; gap: 10px; }
+.field-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.field label, .field .lbl { font-weight: 600; }
+.field output { font-family: var(--mono); font-weight: 600; font-size: 1.1rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 6px; cursor: pointer; }
+.scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+.opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.opt { position: relative; }
+.opt input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+.opt span { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-size: .9rem; transition: border-color .15s, background-color .15s; }
+.opt span::before { content: ""; width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid var(--muted); flex: none; transition: all .15s; }
+.opt input:checked + span { border-color: var(--accent); background: var(--accent-soft); }
+.opt input:checked + span::before { background: var(--accent); border-color: var(--accent); box-shadow: inset 0 0 0 3px var(--accent-soft); }
+.opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 860px) { .finder { grid-template-columns: 1fr; } .finder-in, .finder-out { padding: 22px 20px; } }
+@media (max-width: 460px) { .opts { grid-template-columns: 1fr; } }
+
+/* Billing toggle */
+.toggle { display: inline-flex; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 4px; position: relative; }
+.toggle button { font: 600 .88rem/1 var(--sans); border: 0; background: transparent; color: var(--muted); padding: 10px 14px; border-radius: 7px; cursor: pointer; position: relative; z-index: 1; transition: color .2s; }
+.toggle button[aria-pressed="true"] { color: var(--accent-ink); background: var(--accent); }
+.save { font-family: var(--mono); font-size: .68rem; color: var(--ok); margin-left: 6px; }
+.toggle button[aria-pressed="true"] .save { color: var(--accent-ink); }
+
+/* Tiers */
+.tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.tier { border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 20px; background: var(--bg); position: relative; transition: border-color .25s, box-shadow .25s, transform .25s; }
+.tier:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.tier.pick { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.tier-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.tier-name { font-family: var(--mono); font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+.badge { font-family: var(--mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; font-weight: 500; }
+.badge.pop { background: var(--accent-soft); color: var(--accent); }
+.badge.you { background: var(--accent); color: var(--accent-ink); }
+.badge[hidden] { display: none; }
+.tier-desc { color: var(--muted); font-size: .94rem; }
+.amount { display: flex; align-items: baseline; gap: 6px; }
+.amount b { font-size: 2.9rem; font-weight: 800; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; line-height: 1; }
+.per { color: var(--muted); font-size: .9rem; }
+.billed { font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-top: 6px; }
+.tier ul { margin: 0; padding: 20px 0 0; border-top: 1px solid var(--line); list-style: none; display: grid; gap: 10px; align-content: start; }
+.tier li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; font-size: .93rem; }
+.tier li svg { width: 16px; height: 16px; color: var(--ok); margin-top: 4px; }
+.tier .btn { width: 100%; }
+@media (max-width: 980px) { .tiers { grid-template-columns: 1fr; max-width: 540px; width: 100%; margin: 0 auto; } }
+
+.addon { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 28px; align-items: center; border: 1px dashed var(--muted); border-radius: 16px; padding: 26px 28px; }
+.addon-copy { display: grid; gap: 6px; }
+.addon-copy p { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--mono); font-size: .74rem; padding: 5px 10px; border-radius: 7px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
+.addon-price { display: grid; gap: 4px; text-align: right; }
+.addon-price b { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; }
+.addon-price span { font-size: .85rem; color: var(--muted); }
+@media (max-width: 900px) { .addon { grid-template-columns: 1fr; gap: 16px; padding: 22px 20px; } .addon-price { text-align: left; } }
+
+/* On-demand builder */
+.spec { overflow: hidden; }
+.spec .od-line { background: var(--accent-soft); }
+.spec .od-line dt, .spec .od-line dd { color: var(--accent); }
+.od { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.od-list { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.od-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto auto; gap: 16px; align-items: center; padding: 18px 20px; transition: background-color .15s; }
+.od-row + .od-row { border-top: 1px solid var(--line); }
+.od-row.on { background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface)); }
+.od-row.on .ico { background: var(--accent); color: var(--accent-ink); }
+.od-name { display: grid; gap: 2px; min-width: 0; }
+.od-name b { font-weight: 600; }
+.od-name span { font-size: .85rem; color: var(--muted); }
+.od-price { display: grid; gap: 2px; text-align: right; }
+.od-price b { font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+.od-price small { font-weight: 400; color: var(--muted); font-size: .75rem; }
+.od-price span { font-family: var(--mono); font-size: .72rem; color: var(--ok); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+.stepper button { width: 36px; height: 36px; border: 0; background: transparent; color: var(--ink); font: 600 1.1rem/1 var(--sans); cursor: pointer; border-radius: 9px; }
+.stepper button:hover:not(:disabled) { background: var(--surface-2); color: var(--accent); }
+.stepper button:disabled { color: var(--line); cursor: default; }
+.stepper output { min-width: 34px; text-align: center; font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+.od-sum { position: sticky; top: calc(84px + env(safe-area-inset-top, 0px)); background: var(--con-bg); color: var(--con-ink); border: 1px solid var(--con-line); border-radius: 16px; padding: 24px; display: grid; gap: 16px; }
+.od-sum .k { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--con-muted); }
+#odLines { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .9rem; }
+#odLines li { display: flex; justify-content: space-between; gap: 12px; }
+#odLines li span:first-child { color: var(--con-muted); }
+#odLines li span:last-child { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+#odLines .empty { color: var(--con-muted); }
+.od-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 14px; border-top: 1px dashed var(--con-line); }
+.od-total span { color: var(--con-muted); font-size: .9rem; }
+.od-total b { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.od-compare { border-radius: 10px; padding: 12px 14px; font-size: .88rem; background: rgba(59, 216, 147, .08); border: 1px solid rgba(59, 216, 147, .3); }
+.od-compare b { color: var(--con-ok); font-weight: 600; }
+.od-compare.neutral { background: rgba(125, 151, 255, .08); border-color: rgba(125, 151, 255, .3); }
+.od-compare.neutral b { color: var(--con-blue); }
+.od-compare[hidden] { display: none; }
+.od-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.od-actions .btn { flex: 1; }
+.od-copy { background: var(--con-cyan); color: #04121A; }
+.od-plans { background: transparent; color: var(--con-ink); border-color: var(--con-line); }
+.od-plans:hover { border-color: var(--con-cyan); }
+.od-note { font-size: .75rem; color: var(--con-muted); }
+@media (max-width: 960px) { .od { grid-template-columns: 1fr; } .od-sum { position: static; } }
+@media (max-width: 560px) {
+  .od-row { grid-template-columns: 38px minmax(0, 1fr) auto; grid-template-areas: "i n n" "i p s"; row-gap: 10px; padding: 16px; }
+  .od-row .ico { grid-area: i; align-self: start; }
+  .od-name { grid-area: n; }
+  .od-price { grid-area: p; text-align: left; }
+  .stepper { grid-area: s; }
+}
+
+/* A2P checklist lead magnet */
+.hero-note { justify-self: start; display: inline-flex; align-items: center; gap: 8px; font-size: .92rem; font-weight: 500; color: var(--cyan); text-decoration: none; }
+.hero-note svg { width: 15px; height: 15px; transition: transform .15s; }
+.hero-note:hover svg { transform: translateX(3px); }
+.hero-note .new { font-family: var(--mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 5px; background: rgba(45, 212, 232, .12); border: 1px solid rgba(45, 212, 232, .35); }
+.lead { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: start; }
+.lead-copy { display: grid; gap: 22px; }
+.lead-points { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; font-size: .93rem; }
+.lead-points li { display: flex; gap: 10px; align-items: flex-start; }
+.lead-points svg { width: 16px; height: 16px; color: var(--cyan); margin-top: 4px; flex: none; }
+#leadForm { display: grid; gap: 14px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.lf-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lf-field { display: grid; gap: 6px; }
+.lf-field label { font-size: .85rem; font-weight: 500; color: var(--muted); }
+.lf-field input { width: 100%; font: 400 1rem/1.2 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; transition: border-color .15s, box-shadow .15s; }
+.lf-field input::placeholder { color: color-mix(in srgb, var(--muted) 65%, transparent); }
+.lf-field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.lf-field input[aria-invalid="true"] { border-color: var(--danger); }
+.lf-consent { display: flex; gap: 10px; align-items: flex-start; font-size: .85rem; color: var(--muted); cursor: pointer; }
+.lf-consent input { accent-color: var(--accent); width: 16px; height: 16px; margin-top: 3px; flex: none; }
+.lf-error { color: var(--danger); font-size: .88rem; min-height: 0; }
+.lf-error:empty { display: none; }
+#leadForm .btn { justify-self: start; }
+#leadForm .btn:disabled { opacity: .6; cursor: wait; transform: none; }
+.lf-fine { font-size: .78rem; color: var(--muted); }
+.lf-done { display: grid; gap: 8px; padding: 20px; border-radius: 14px; border: 1px solid rgba(52, 211, 153, .35); background: rgba(52, 211, 153, .07); }
+.lf-done b { color: var(--ok); font-size: 1.05rem; }
+.lf-done span { color: var(--muted); font-size: .92rem; }
+.lf-done-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.lf-done-actions .btn { padding: 11px 16px; font-size: .88rem; }
+.lf-done[hidden], .lf-done-actions [hidden] { display: none; }
+
+.ck { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+.ck-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 20px; background: var(--surface-2); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+.ck-prog { display: inline-flex; align-items: center; gap: 10px; font-variant-numeric: tabular-nums; color: var(--ink); }
+.ck-bar { width: 96px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.ck-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--cyan)); transition: width .3s ease; }
+.ck-group { padding: 16px 20px 4px; }
+.ck-group h4 { font-family: var(--mono); font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--cyan); margin-bottom: 4px; }
+.ck-item { display: grid; grid-template-columns: 20px 1fr; gap: 12px; padding: 11px 0; cursor: pointer; }
+.ck-item + .ck-item { border-top: 1px dashed var(--line); }
+.ck-item input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 3px 0 0; border: 1.5px solid var(--muted); border-radius: 5px; display: grid; place-items: center; cursor: pointer; transition: background-color .15s, border-color .15s; }
+.ck-item input::after { content: ""; width: 5px; height: 9px; border-right: 2px solid var(--accent-ink); border-bottom: 2px solid var(--accent-ink); transform: rotate(45deg) translate(-1px, -1px); opacity: 0; }
+.ck-item input:checked { background: var(--ok); border-color: var(--ok); }
+.ck-item input:checked::after { opacity: 1; }
+.ck-item input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ck-item b { display: block; font-weight: 600; font-size: .95rem; line-height: 1.4; transition: color .15s; }
+.ck-item small { display: block; color: var(--muted); font-size: .85rem; line-height: 1.5; margin-top: 2px; }
+.ck-item input:checked + span b { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--ok); }
+.ck-rest { position: relative; padding-bottom: 12px; }
+.ck[data-locked="true"] .ck-rest .ck-group { filter: blur(4px); opacity: .5; user-select: none; }
+.ck-lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; padding: 24px; text-align: center; background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 30%, transparent), color-mix(in srgb, var(--surface) 92%, transparent) 35%); }
+.ck-lock .lock-ico { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line); }
+.ck-lock .lock-ico svg { width: 22px; height: 22px; }
+.ck-lock b { font-family: var(--display); font-size: 1.25rem; }
+.ck-lock span { color: var(--muted); font-size: .92rem; max-width: 30ch; }
+.ck-lock .btn { margin-top: 6px; padding: 11px 16px; font-size: .9rem; }
+.ck[data-locked="false"] .ck-lock { display: none; }
+@media (max-width: 960px) { .lead { grid-template-columns: 1fr; gap: 36px; } }
+@media (max-width: 520px) { .lf-row, .lead-points { grid-template-columns: 1fr; } #leadForm { padding: 18px; } .ck-group, .ck-head { padding-left: 16px; padding-right: 16px; } }
+
+/* Compare */
+.compare { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 660px; font-size: .93rem; }
+th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--line); }
+tbody tr:last-child > * { border-bottom: 0; }
+tbody tr:hover > * { background: var(--surface-2); }
+thead th { font-family: var(--mono); font-size: .74rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 500; background: var(--surface-2); }
+tbody th { font-weight: 500; }
+td { font-family: var(--mono); font-size: .84rem; font-variant-numeric: tabular-nums; }
+td.dim { color: var(--muted); }
+th.hl, td.hl { box-shadow: inset 1px 0 0 var(--line), inset -1px 0 0 var(--line); }
+thead th.hl { color: var(--accent); }
+
+/* Timeline */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; position: relative; }
+.timeline::before { content: ""; position: absolute; top: 15px; left: 15px; right: 15px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--cyan)); opacity: .5; }
+.timeline li { display: grid; gap: 10px; position: relative; align-content: start; }
+.node { width: 32px; height: 32px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); display: grid; place-items: center; font-family: var(--mono); font-size: .75rem; font-weight: 600; color: var(--accent); }
+.when { font-family: var(--mono); font-size: .75rem; color: var(--cyan); text-transform: uppercase; letter-spacing: .06em; }
+.timeline p { color: var(--muted); font-size: .93rem; }
+@media (max-width: 860px) {
+  .timeline { grid-template-columns: 1fr; gap: 28px; padding-left: 46px; }
+  .timeline::before { top: 0; bottom: 0; left: 15px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--accent), var(--cyan)); }
+  .node { position: absolute; left: -46px; top: -4px; }
+}
+
+/* FAQ */
+.faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 48px; align-items: start; }
+.faq { border-top: 1px solid var(--line); }
+details { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; list-style: none; padding: 20px 44px 20px 0; font-weight: 600; font-size: 1.05rem; position: relative; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 10px; height: 10px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-70%) rotate(45deg); transition: transform .2s; }
+details[open] summary::after { transform: translateY(-30%) rotate(-135deg); border-color: var(--accent); }
+summary:hover { color: var(--accent); }
+details p { padding: 0 0 20px; color: var(--muted); max-width: 66ch; }
+@media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; gap: 24px; } }
+
+/* Contact */
+.cta { background: var(--con-bg); color: var(--con-ink); position: relative; overflow: hidden; }
+.cta::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(125,151,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(125,151,255,.07) 1px, transparent 1px); background-size: 44px 44px; pointer-events: none; }
+.cta .wrap { position: relative; padding-block: 88px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.cta .tag { color: var(--con-cyan); }
+.cta h2 { margin-top: 14px; }
+.cta p { color: var(--con-muted); margin-top: 16px; max-width: 52ch; font-size: 1.05rem; }
+.contact { display: grid; gap: 10px; }
+.crow { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 16px; border: 1px solid var(--con-line); border-radius: 12px; background: rgba(255,255,255,.02); flex-wrap: wrap; }
+.crow .k { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--con-muted); width: 56px; }
+.crow b { font-weight: 600; flex: 1; min-width: 0; user-select: all; overflow-wrap: anywhere; }
+.copy { font: 500 .78rem/1 var(--mono); background: transparent; color: var(--con-ink); border: 1px solid var(--con-line); padding: 8px 10px; border-radius: 7px; cursor: pointer; }
+.copy:hover { border-color: var(--con-cyan); color: var(--con-cyan); }
+.cta .btn-primary { background: var(--con-cyan); color: #04121A; box-shadow: none; margin-top: 6px; }
+@media (max-width: 860px) { .cta .wrap { grid-template-columns: 1fr; padding-block: 64px; gap: 32px; } }
+
+footer .wrap { padding-block: 28px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: .84rem; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; background: var(--surface-2); color: var(--ink); border: 1px solid var(--cyan); font: 500 .85rem/1 var(--mono); padding: 12px 16px; border-radius: 9px; transition: all .25s; pointer-events: none; z-index: 70; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></symbol>
+  <symbol id="i-social" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3M8 17h6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span></span>SyncTech <small>CRM Ops</small></a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#on-demand">On-demand</a>
+      <a href="#a2p-checklist">Free checklist</a>
+      <a href="#process">Onboarding</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="status-pill"><span class="dot"></span>Support desk online · 7 days a week</span>
+      <h1>The technical team behind your HighLevel agency, handling <span class="rotator"><span id="rot">live chat</span><span class="caret" aria-hidden="true"></span></span></h1>
+      <p class="lede">White-label support for agency owners. We answer your clients, fix workflows, onboard sub-accounts, get A2P approved, run social and build what you sell, so you can focus on closing deals.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#pricing">Find your plan <svg><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#services">Explore services</a>
+      </div>
+      <ul class="checks">
+        <li><svg><use href="#i-check"/></svg>Fully white-labeled</li>
+        <li><svg><use href="#i-check"/></svg>No long-term contract</li>
+        <li><svg><use href="#i-check"/></svg>Live in under 2 weeks</li>
+      </ul>
+      <a class="hero-note" href="#a2p-checklist"><span class="new">Free</span>Get our A2P 10DLC approval checklist <svg><use href="#i-arrow"/></svg></a>
+    </div>
+
+    <figure class="console" aria-label="Example of our support activity feed">
+      <div class="con-bar">
+        <div class="con-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span class="con-title">synctech://agency/support-feed</span>
+        <span class="con-live">LIVE</span>
+      </div>
+      <div class="con-stats">
+        <div class="con-stat"><span>First reply</span><b>2m 41s</b>
+          <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#45D4F2" stroke-width="1.6" points="0,8 12,12 24,7 36,14 48,10 60,15 72,12 84,17 100,16"/></svg></div>
+        <div class="con-stat"><span>Resolved today</span><b id="resolved">38</b>
+          <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#3BD893" stroke-width="1.6" points="0,19 14,17 28,15 42,14 56,11 70,9 84,6 100,3"/></svg></div>
+        <div class="con-stat"><span>CSAT</span><b>4.9<em>/5</em></b>
+          <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#7D97FF" stroke-width="1.6" points="0,6 14,5 28,7 42,4 56,5 70,4 84,3 100,4"/></svg></div>
+      </div>
+      <ul class="feed" id="feed" aria-live="off">
+        <li><time>21:44</time><span class="txt"><b>Brightside Dental</b> · A2P campaign resubmitted</span><span class="lvl warn">A2P</span></li>
+        <li><time>21:39</time><span class="txt"><b>Peak Roofing</b> · Missed-call text-back fixed</span><span class="lvl ok">FIXED</span></li>
+        <li><time>21:31</time><span class="txt"><b>Luma Med Spa</b> · Chat answered: booking link</span><span class="lvl info">CHAT</span></li>
+        <li><time>21:22</time><span class="txt"><b>Northside HVAC</b> · Snapshot loaded, calendars live</span><span class="lvl ok">ONBOARD</span></li>
+        <li><time>21:10</time><span class="txt"><b>Ironclad Gym</b> · 12 posts scheduled for June</span><span class="lvl info">SOCIAL</span></li>
+      </ul>
+      <div class="con-foot"><span>Example feed for illustration</span><span>tz: client local</span></div>
+    </figure>
+  </div>
+</section>
+
+<section class="metrics" aria-label="Key numbers">
+  <div class="wrap">
+    <div class="metric"><b>&lt; 3 min</b><span>median live chat reply</span></div>
+    <div class="metric"><b>1 hr</b><span>fastest technical SLA</span></div>
+    <div class="metric"><b>6</b><span>support desks, one team</span></div>
+    <div class="metric"><b>$0</b><span>setup fee on any plan</span></div>
+  </div>
+</section>
+
+<section class="block" id="services">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Services</span>
+      <h2>Everything your sub-accounts need, handled by specialists</h2>
+      <p class="lede">Pick a desk to see exactly what we do and how it's included in each plan.</p>
+    </div>
+
+    <div class="explorer">
+      <div class="tabs" role="tablist" aria-label="Services">
+        <button class="tab" role="tab" id="t-chat" aria-controls="p-chat" aria-selected="true"><span class="ico"><svg><use href="#i-chat"/></svg></span><span>Live chat support<small>Your brand, your widget</small></span></button>
+        <button class="tab" role="tab" id="t-tech" aria-controls="p-tech" aria-selected="false" tabindex="-1"><span class="ico"><svg><use href="#i-wrench"/></svg></span><span>Technical support<small>Workflows, DNS, integrations</small></span></button>
+        <button class="tab" role="tab" id="t-onb" aria-controls="p-onb" aria-selected="false" tabindex="-1"><span class="ico"><svg><use href="#i-rocket"/></svg></span><span>Onboarding<small>Snapshot to go-live</small></span></button>
+        <button class="tab" role="tab" id="t-soc" aria-controls="p-soc" aria-selected="false" tabindex="-1"><span class="ico"><svg><use href="#i-social"/></svg></span><span>Social media<small>Planned and scheduled</small></span></button>
+        <button class="tab" role="tab" id="t-a2p" aria-controls="p-a2p" aria-selected="false" tabindex="-1"><span class="ico"><svg><use href="#i-phone"/></svg></span><span>Phone &amp; A2P<small>LC Phone, 10DLC</small></span></button>
+        <button class="tab" role="tab" id="t-build" aria-controls="p-build" aria-selected="false" tabindex="-1"><span class="ico"><svg><use href="#i-code"/></svg></span><span>Custom builds<small>Funnels, automations, AI</small></span></button>
+      </div>
+
+      <div>
+        <article class="panel" role="tabpanel" id="p-chat" aria-labelledby="t-chat">
+          <div class="panel-top"><span class="tag">Live chat support</span><h3>A trained agent in your chat widget, answering as your agency</h3><p>Your clients and their leads get fast, accurate answers. We follow a playbook written with you and only escalate what truly needs you.</p></div>
+          <div class="panel-grid">
+            <ul class="deliver">
+              <li><svg><use href="#i-check"/></svg>White-labeled replies in your brand voice and support inbox</li>
+              <li><svg><use href="#i-check"/></svg>"How do I…" walkthroughs with screen recordings for clients</li>
+              <li><svg><use href="#i-check"/></svg>Smart escalation to you by Slack, SMS or email</li>
+              <li><svg><use href="#i-check"/></svg>Daily digest of conversations and recurring issues</li>
+            </ul>
+            <dl class="spec"><div><dt>Starter</dt><dd>Mon–Fri 9–6</dd></div><div><dt>Growth</dt><dd>7 days 8–10</dd></div><div><dt>Scale</dt><dd>24/7</dd></div><div><dt>Median reply</dt><dd>&lt; 3 min</dd></div><div class="od-line"><dt>On-demand</dt><dd>$39 / hr</dd></div></dl>
+          </div>
+        </article>
+        <article class="panel" role="tabpanel" id="p-tech" aria-labelledby="t-tech" hidden>
+          <div class="panel-top"><span class="tag">Technical support</span><h3>Broken things get diagnosed and fixed, not just ticketed</h3><p>From a workflow that stopped firing to a domain that won't verify, our technicians work directly inside the sub-account.</p></div>
+          <div class="panel-grid">
+            <ul class="deliver">
+              <li><svg><use href="#i-check"/></svg>Workflow, trigger and automation debugging</li>
+              <li><svg><use href="#i-check"/></svg>Domain, DNS, SSL and dedicated email setup</li>
+              <li><svg><use href="#i-check"/></svg>Stripe, Zapier, webhooks and API integrations</li>
+              <li><svg><use href="#i-check"/></svg>Calendar sync, forms, tracking and reporting fixes</li>
+            </ul>
+            <dl class="spec"><div><dt>Starter</dt><dd>1 business day</dd></div><div><dt>Growth</dt><dd>4 hours</dd></div><div><dt>Scale</dt><dd>1 hour</dd></div><div><dt>Access</dt><dd>Agency user</dd></div><div class="od-line"><dt>On-demand</dt><dd>$129 / fix</dd></div></dl>
+          </div>
+        </article>
+        <article class="panel" role="tabpanel" id="p-onb" aria-labelledby="t-onb" hidden>
+          <div class="panel-top"><span class="tag">Onboarding</span><h3>New clients go live fast, set up the same way every time</h3><p>Hand us a signed client and we'll take the sub-account from empty to running, then train their team.</p></div>
+          <div class="panel-grid">
+            <ul class="deliver">
+              <li><svg><use href="#i-check"/></svg>Snapshot loading and per-client customization</li>
+              <li><svg><use href="#i-check"/></svg>Calendars, pipelines, forms and custom values</li>
+              <li><svg><use href="#i-check"/></svg>Contact import and integration hookups</li>
+              <li><svg><use href="#i-check"/></svg>Recorded training session for the client's staff</li>
+            </ul>
+            <dl class="spec"><div><dt>Starter</dt><dd>2 / month</dd></div><div><dt>Growth</dt><dd>5 / month</dd></div><div><dt>Scale</dt><dd>Unlimited</dd></div><div><dt>Turnaround</dt><dd>3–5 days</dd></div><div class="od-line"><dt>On-demand</dt><dd>$349 / account</dd></div></dl>
+          </div>
+        </article>
+        <article class="panel" role="tabpanel" id="p-soc" aria-labelledby="t-soc" hidden>
+          <div class="panel-top"><span class="tag">Social media</span><h3>Consistent posting for your clients without you writing a word</h3><p>We plan, write, design and schedule posts through Social Planner, and keep reviews flowing.</p></div>
+          <div class="panel-grid">
+            <ul class="deliver">
+              <li><svg><use href="#i-check"/></svg>Monthly content calendar approved by the client</li>
+              <li><svg><use href="#i-check"/></svg>Facebook, Instagram, Google Business and LinkedIn</li>
+              <li><svg><use href="#i-check"/></svg>Branded graphics and captions</li>
+              <li><svg><use href="#i-check"/></svg>Review-request and reputation workflows</li>
+            </ul>
+            <dl class="spec"><div><dt>Starter</dt><dd>Add-on</dd></div><div><dt>Growth</dt><dd>3 clients × 12</dd></div><div><dt>Scale</dt><dd>10 clients × 20</dd></div><div><dt>Tool</dt><dd>Social Planner</dd></div><div class="od-line"><dt>On-demand</dt><dd>$299 / client / mo</dd></div></dl>
+          </div>
+        </article>
+        <article class="panel" role="tabpanel" id="p-a2p" aria-labelledby="t-a2p" hidden>
+          <div class="panel-top"><span class="tag">Phone &amp; A2P</span><h3>LC Phone set up right and 10DLC approved the first time</h3><p>Carrier rejections stall texting for weeks. We prepare the brand, campaign, opt-in forms and website copy so registrations go through.</p></div>
+          <div class="panel-grid">
+            <ul class="deliver">
+              <li><svg><use href="#i-check"/></svg>A2P 10DLC brand and campaign registration</li>
+              <li><svg><use href="#i-check"/></svg>Rejection diagnosis, compliance fixes and resubmission</li>
+              <li><svg><use href="#i-check"/></svg>Number purchase, porting and call routing</li>
+              <li><svg><use href="#i-check"/></svg>IVR menus, voicemail and missed-call text-back</li>
+            </ul>
+            <dl class="spec"><div><dt>Starter</dt><dd>3 brands</dd></div><div><dt>Growth</dt><dd>Unlimited</dd></div><div><dt>Scale</dt><dd>+ porting &amp; IVR</dd></div><div><dt>Standard</dt><dd>10DLC / TCPA</dd></div><div class="od-line"><dt>On-demand</dt><dd>$199 / brand</dd></div></dl>
+          </div>
+        </article>
+        <article class="panel" role="tabpanel" id="p-build" aria-labelledby="t-build" hidden>
+          <div class="panel-top"><span class="tag">Custom builds</span><h3>Funnels, automations and snapshots built to spec for you to resell</h3><p>Use monthly build hours on Growth and Scale, or order a fixed-price project on any plan. You own everything we build.</p></div>
+          <div class="panel-grid">
+            <ul class="deliver">
+              <li><svg><use href="#i-check"/></svg>Funnels, websites and membership areas</li>
+              <li><svg><use href="#i-check"/></svg>Multi-step automations and AI chat and voice agents</li>
+              <li><svg><use href="#i-check"/></svg>Niche snapshots ready to sell</li>
+              <li><svg><use href="#i-check"/></svg>Custom integrations through webhooks and the API</li>
+            </ul>
+            <dl class="spec"><div><dt>Starter</dt><dd>$95 / hr</dd></div><div><dt>Growth</dt><dd>3 hrs / mo</dd></div><div><dt>Scale</dt><dd>10 hrs / mo</dd></div><div><dt>Projects</dt><dd>from $1,500</dd></div><div class="od-line"><dt>On-demand</dt><dd>$125 / hr</dd></div></dl>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="pricing">
+  <div class="wrap">
+    <div class="head split">
+      <div class="head">
+        <span class="tag">Pricing</span>
+        <h2>Simple plans that scale with your agency</h2>
+        <p class="lede">Answer two quick questions and we'll point you to the right plan.</p>
+      </div>
+      <div class="toggle" role="group" aria-label="Billing period">
+        <button type="button" id="billM" aria-pressed="true">Monthly</button>
+        <button type="button" id="billA" aria-pressed="false">Annual<span class="save">2 months free</span></button>
+      </div>
+    </div>
+
+    <div class="finder">
+      <div class="finder-in">
+        <div class="field">
+          <div class="field-row"><label for="subs">How many sub-accounts do you manage?</label><output id="subsOut" for="subs">8</output></div>
+          <input type="range" id="subs" min="1" max="60" value="8">
+          <div class="scale"><span>1</span><span>10</span><span>30</span><span>60+</span></div>
+        </div>
+        <div class="field">
+          <span class="lbl" id="needsLbl">What do you need?</span>
+          <div class="opts" role="group" aria-labelledby="needsLbl">
+            <label class="opt"><input type="checkbox" id="n-evening" value="evening"><span>Evening &amp; weekend chat</span></label>
+            <label class="opt"><input type="checkbox" id="n-247" value="247"><span>24/7 chat coverage</span></label>
+            <label class="opt"><input type="checkbox" id="n-social" value="social"><span>Social media for clients</span></label>
+            <label class="opt"><input type="checkbox" id="n-build" value="build"><span>Monthly custom builds</span></label>
+            <label class="opt"><input type="checkbox" id="n-fast" value="fast"><span>Same-hour tech fixes</span></label>
+            <label class="opt"><input type="checkbox" id="n-am" value="am"><span>Dedicated account manager</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="finder-out" aria-live="polite">
+        <span class="k">Recommended plan</span>
+        <div class="plan" id="recName">Starter<span id="recPrice">$297/mo</span></div>
+        <ul id="recWhy"><li>Covers up to 10 sub-accounts</li></ul>
+        <a class="btn" href="#tiers" id="recBtn">View plan details <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+
+    <div class="tiers" id="tiers">
+      <article class="tier" data-tier="starter">
+        <div class="tier-head"><span class="tier-name">Starter</span><span class="badge you" hidden>Your match</span></div>
+        <p class="tier-desc">For agencies with a handful of clients who need someone on call.</p>
+        <div><div class="amount"><b data-m="297" data-a="248">$297</b><span class="per">/ month</span></div><div class="billed" data-m="Billed monthly · cancel anytime" data-a="$2,970 billed yearly">Billed monthly · cancel anytime</div></div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Up to 10 sub-accounts</li>
+          <li><svg><use href="#i-check"/></svg>Live chat, Mon–Fri 9am–6pm</li>
+          <li><svg><use href="#i-check"/></svg>Technical support, 1-business-day response</li>
+          <li><svg><use href="#i-check"/></svg>2 client onboardings per month</li>
+          <li><svg><use href="#i-check"/></svg>A2P registration for up to 3 brands</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">Get started</a>
+      </article>
+      <article class="tier" data-tier="growth">
+        <div class="tier-head"><span class="tier-name">Growth</span><span class="badge pop">Most popular</span><span class="badge you" hidden>Your match</span></div>
+        <p class="tier-desc">For agencies signing new clients every month.</p>
+        <div><div class="amount"><b data-m="697" data-a="581">$697</b><span class="per">/ month</span></div><div class="billed" data-m="Billed monthly · cancel anytime" data-a="$6,970 billed yearly">Billed monthly · cancel anytime</div></div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Up to 30 sub-accounts</li>
+          <li><svg><use href="#i-check"/></svg>Live chat, 7 days 8am–10pm</li>
+          <li><svg><use href="#i-check"/></svg>Technical support, 4-hour response</li>
+          <li><svg><use href="#i-check"/></svg>5 client onboardings per month</li>
+          <li><svg><use href="#i-check"/></svg>Social media for 3 clients (12 posts each)</li>
+          <li><svg><use href="#i-check"/></svg>Unlimited A2P registrations and fixes</li>
+          <li><svg><use href="#i-check"/></svg>3 custom build hours per month</li>
+        </ul>
+        <a class="btn btn-primary" href="#contact">Get started</a>
+      </article>
+      <article class="tier" data-tier="scale">
+        <div class="tier-head"><span class="tier-name">Scale</span><span class="badge you" hidden>Your match</span></div>
+        <p class="tier-desc">For established agencies that want a full back office.</p>
+        <div><div class="amount"><b data-m="1,497" data-a="1,248">$1,497</b><span class="per">/ month</span></div><div class="billed" data-m="Billed monthly · cancel anytime" data-a="$14,970 billed yearly">Billed monthly · cancel anytime</div></div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Unlimited sub-accounts</li>
+          <li><svg><use href="#i-check"/></svg>Live chat, 24/7</li>
+          <li><svg><use href="#i-check"/></svg>Technical support, 1-hour priority response</li>
+          <li><svg><use href="#i-check"/></svg>Unlimited client onboardings</li>
+          <li><svg><use href="#i-check"/></svg>Social media for 10 clients (20 posts each)</li>
+          <li><svg><use href="#i-check"/></svg>Unlimited A2P, number porting and IVR</li>
+          <li><svg><use href="#i-check"/></svg>10 custom build hours per month</li>
+          <li><svg><use href="#i-check"/></svg>Dedicated account manager and Slack channel</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">Talk to sales</a>
+      </article>
+    </div>
+
+    <div class="addon">
+      <div class="addon-copy"><span class="tag">Custom builds · any plan</span><h3>Need a bigger project?</h3><p>Fixed-price projects scoped in writing before we start. You own the result.</p></div>
+      <div class="chips"><span class="chip">Funnels &amp; websites</span><span class="chip">Niche snapshots</span><span class="chip">AI chat &amp; voice agents</span><span class="chip">API integrations</span><span class="chip">Memberships</span></div>
+      <div class="addon-price"><b>from $1,500</b><span>for subscribers · $1,950 on-demand</span></div>
+    </div>
+
+    <div class="compare" role="region" aria-label="Plan comparison" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Feature</th><th scope="col">Starter</th><th scope="col" class="hl">Growth</th><th scope="col">Scale</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Sub-accounts covered</th><td>10</td><td class="hl">30</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Live chat hours</th><td>Mon–Fri 9–6</td><td class="hl">7 days 8–10</td><td>24/7</td></tr>
+          <tr><th scope="row">Technical response time</th><td>1 business day</td><td class="hl">4 hours</td><td>1 hour</td></tr>
+          <tr><th scope="row">Onboardings / month</th><td>2</td><td class="hl">5</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Social media</th><td class="dim">Add-on</td><td class="hl">3 × 12 posts</td><td>10 × 20 posts</td></tr>
+          <tr><th scope="row">A2P registrations</th><td>3 brands</td><td class="hl">Unlimited</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Porting &amp; IVR</th><td class="dim">—</td><td class="hl">Porting</td><td>Porting + IVR</td></tr>
+          <tr><th scope="row">Custom build hours</th><td class="dim">$95/hr</td><td class="hl">3 / month</td><td>10 / month</td></tr>
+          <tr><th scope="row">Account manager</th><td class="dim">—</td><td class="hl dim">—</td><td>Dedicated</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="on-demand">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">On-demand</span>
+      <h2>Need just one thing? Order any service without a plan</h2>
+      <p class="lede">Every service can be booked as a custom request, no subscription required. On-demand rates are higher than plan rates, so if you need help every month, a plan costs less.</p>
+    </div>
+    <div class="od">
+      <div class="od-list">
+        <div class="od-row" data-id="chat" data-price="39" data-step="10" data-name="Live chat hours">
+          <span class="ico"><svg><use href="#i-chat"/></svg></span>
+          <div class="od-name"><b>Live chat coverage</b><span>Per hour, booked in blocks of 10</span></div>
+          <div class="od-price"><b>$39<small> /hr</small></b><span>Included in all plans</span></div>
+          <div class="stepper"><button type="button" data-d="-1" aria-label="Fewer live chat hours">−</button><output>0</output><button type="button" data-d="1" aria-label="More live chat hours">+</button></div>
+        </div>
+        <div class="od-row" data-id="tech" data-price="129" data-name="Technical fixes">
+          <span class="ico"><svg><use href="#i-wrench"/></svg></span>
+          <div class="od-name"><b>Technical fix</b><span>One issue diagnosed and resolved</span></div>
+          <div class="od-price"><b>$129<small> /fix</small></b><span>Unlimited in all plans</span></div>
+          <div class="stepper"><button type="button" data-d="-1" aria-label="Fewer technical fixes">−</button><output>0</output><button type="button" data-d="1" aria-label="More technical fixes">+</button></div>
+        </div>
+        <div class="od-row" data-id="onb" data-price="349" data-name="Sub-account onboardings">
+          <span class="ico"><svg><use href="#i-rocket"/></svg></span>
+          <div class="od-name"><b>Sub-account onboarding</b><span>Snapshot, setup and client training</span></div>
+          <div class="od-price"><b>$349<small> /account</small></b><span>2–unlimited in plans</span></div>
+          <div class="stepper"><button type="button" data-d="-1" aria-label="Fewer onboardings">−</button><output>1</output><button type="button" data-d="1" aria-label="More onboardings">+</button></div>
+        </div>
+        <div class="od-row" data-id="soc" data-price="299" data-name="Social media clients (monthly)">
+          <span class="ico"><svg><use href="#i-social"/></svg></span>
+          <div class="od-name"><b>Social media management</b><span>12 posts for one client, one month</span></div>
+          <div class="od-price"><b>$299<small> /client</small></b><span>Included on Growth+</span></div>
+          <div class="stepper"><button type="button" data-d="-1" aria-label="Fewer social media clients">−</button><output>0</output><button type="button" data-d="1" aria-label="More social media clients">+</button></div>
+        </div>
+        <div class="od-row" data-id="a2p" data-price="199" data-name="A2P registrations">
+          <span class="ico"><svg><use href="#i-phone"/></svg></span>
+          <div class="od-name"><b>A2P 10DLC registration</b><span>Brand and campaign, including resubmits</span></div>
+          <div class="od-price"><b>$199<small> /brand</small></b><span>Included in all plans</span></div>
+          <div class="stepper"><button type="button" data-d="-1" aria-label="Fewer A2P registrations">−</button><output>1</output><button type="button" data-d="1" aria-label="More A2P registrations">+</button></div>
+        </div>
+        <div class="od-row" data-id="build" data-price="125" data-step="5" data-name="Custom build hours">
+          <span class="ico"><svg><use href="#i-code"/></svg></span>
+          <div class="od-name"><b>Custom build</b><span>Per hour, booked in blocks of 5</span></div>
+          <div class="od-price"><b>$125<small> /hr</small></b><span>$95/hr for subscribers</span></div>
+          <div class="stepper"><button type="button" data-d="-1" aria-label="Fewer build hours">−</button><output>0</output><button type="button" data-d="1" aria-label="More build hours">+</button></div>
+        </div>
+      </div>
+
+      <aside class="od-sum" aria-live="polite">
+        <span class="k">Your custom request</span>
+        <ul id="odLines"></ul>
+        <div class="od-total"><span>Estimated total</span><b id="odTotal">$0</b></div>
+        <div class="od-compare" id="odCompare" hidden></div>
+        <div class="od-actions">
+          <button class="btn od-copy" type="button" id="odCopy">Copy request</button>
+          <a class="btn od-plans" href="#pricing">Compare plans</a>
+        </div>
+        <p class="od-note">One-time charge, billed when work starts. Social media is billed per month. Carrier and HighLevel fees are not included.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="a2p-checklist">
+  <div class="wrap">
+    <div class="lead">
+      <div class="lead-copy">
+        <span class="tag">Free resource</span>
+        <h2>The A2P 10DLC approval checklist</h2>
+        <p class="lede">The 16 checks we run before every brand and campaign registration. Use it to get approved the first time, or to find out why a campaign was rejected.</p>
+        <ul class="lead-points">
+          <li><svg><use href="#i-check"/></svg>Brand details carriers verify</li>
+          <li><svg><use href="#i-check"/></svg>Privacy policy and SMS terms wording</li>
+          <li><svg><use href="#i-check"/></svg>Opt-in form and consent disclosure</li>
+          <li><svg><use href="#i-check"/></svg>Campaign description and sample messages</li>
+        </ul>
+
+        <form id="leadForm" novalidate>
+          <div class="lf-row">
+            <div class="lf-field"><label for="lf-name">First name</label><input id="lf-name" name="first_name" autocomplete="given-name" placeholder="Jordan"></div>
+            <div class="lf-field"><label for="lf-email">Work email</label><input id="lf-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@youragency.com"></div>
+          </div>
+          <label class="lf-consent" for="lf-consent"><input type="checkbox" id="lf-consent" required><span>Send me the checklist and occasional HighLevel tips from SyncTech. Unsubscribe anytime.</span></label>
+          <p class="lf-error" id="lfError" role="alert"></p>
+          <button class="btn btn-primary" type="submit" id="lfSubmit">Unlock the free checklist <svg><use href="#i-arrow"/></svg></button>
+          <p class="lf-fine">No spam. We never share your email.</p>
+        </form>
+
+        <div class="lf-done" id="lfDone" hidden>
+          <b>✓ Checklist unlocked</b>
+          <span>Tick items off as you go. Your progress is saved in this browser.</span>
+          <div class="lf-done-actions">
+            <button class="btn btn-ghost" type="button" id="ckCopy">Copy as text</button>
+            <a class="btn btn-ghost" id="ckDownload" href="#" target="_blank" rel="noopener" hidden>Download PDF</a>
+            <a class="btn btn-primary" href="#on-demand">Have us register it · $199</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ck" id="checklist" data-locked="true" aria-label="A2P 10DLC approval checklist">
+        <div class="ck-head"><span>A2P-10DLC · approval checklist</span><span class="ck-prog"><span id="ckCount">0 / 16</span><span class="ck-bar"><i id="ckBar"></i></span></span></div>
+
+        <div class="ck-group">
+          <h4>1 · Brand registration</h4>
+          <label class="ck-item"><input type="checkbox" data-k="b1"><span><b>Legal name and EIN match IRS records</b><small>Use the exact name on your CP-575 or 147C letter, including "LLC" or "Inc."</small></span></label>
+          <label class="ck-item"><input type="checkbox" data-k="b2"><span><b>Address matches the EIN registration</b><small>No PO boxes or virtual mailboxes.</small></span></label>
+          <label class="ck-item"><input type="checkbox" data-k="b3"><span><b>Correct brand type selected</b><small>Sole proprietor only when there is no EIN. Otherwise register as a private or public company.</small></span></label>
+          <label class="ck-item"><input type="checkbox" data-k="b4"><span><b>Business website and email are live</b><small>Website on its own domain, with a contact email on that domain where possible.</small></span></label>
+        </div>
+
+        <div class="ck-rest">
+          <div class="ck-groups" id="ckGroups" inert>
+            <div class="ck-group">
+              <h4>2 · Website compliance</h4>
+              <label class="ck-item"><input type="checkbox" data-k="w1"><span><b>Privacy policy covers SMS</b><small>States that mobile numbers and opt-in data are not shared with third parties or affiliates for marketing.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="w2"><span><b>Terms page includes SMS terms</b><small>Program name, message types, "Message frequency varies", "Msg &amp; data rates may apply", and STOP and HELP instructions.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="w3"><span><b>Both pages are public and linked in the footer</b><small>No login wall, no "coming soon" page.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="w4"><span><b>No restricted content</b><small>Site and messages avoid restricted categories such as cannabis, firearms and high-risk lending.</small></span></label>
+            </div>
+            <div class="ck-group">
+              <h4>3 · Opt-in form</h4>
+              <label class="ck-item"><input type="checkbox" data-k="o1"><span><b>SMS consent checkbox is separate and unchecked</b><small>Not pre-ticked, not bundled with accepting terms, and not required to submit the form.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="o2"><span><b>Disclosure text sits next to the checkbox</b><small>Brand name, what you'll send, frequency, rates, STOP and HELP, and links to privacy and terms.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="o3"><span><b>The form is publicly reachable</b><small>Reviewers must be able to open the opt-in URL you list in the campaign.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="o4"><span><b>STOP, HELP and START replies are set up</b><small>Each auto-reply includes your brand name.</small></span></label>
+            </div>
+            <div class="ck-group">
+              <h4>4 · Campaign details</h4>
+              <label class="ck-item"><input type="checkbox" data-k="c1"><span><b>Use case matches what you actually send</b><small>For example Customer Care or Marketing. Choose Mixed if you send both.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="c2"><span><b>Description covers who, what and why</b><small>Who sends, who receives, why they receive it, and how they opted in.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="c3"><span><b>Message flow points to the exact opt-in</b><small>The URL of the form, or a hosted screenshot for paper or verbal opt-in.</small></span></label>
+              <label class="ck-item"><input type="checkbox" data-k="c4"><span><b>Two or more sample messages that match</b><small>Brand name in each, "Reply STOP to opt out", and real links instead of public URL shorteners.</small></span></label>
+            </div>
+          </div>
+          <div class="ck-lock" id="ckLock">
+            <span class="lock-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+            <b>12 more checks</b>
+            <span>Enter your email to unlock the full checklist.</span>
+            <a class="btn btn-primary" href="#leadForm" id="ckLockBtn">Unlock free</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="process">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Onboarding</span>
+      <h2>From kickoff to fully staffed in under two weeks</h2>
+    </div>
+    <ol class="timeline">
+      <li><span class="node">1</span><span class="when">Day 1</span><h3>Kickoff call</h3><p>We learn your offer, snapshot, clients and how you want them spoken to.</p></li>
+      <li><span class="node">2</span><span class="when">Days 2–3</span><h3>Secure access</h3><p>You add us as agency users with the permissions you choose. We audit every sub-account.</p></li>
+      <li><span class="node">3</span><span class="when">Days 4–10</span><h3>Playbook &amp; cleanup</h3><p>We write your support playbook and clear the backlog: broken workflows, pending A2P, stalled onboardings.</p></li>
+      <li><span class="node">4</span><span class="when">Ongoing</span><h3>We take the desk</h3><p>Our team goes live in your widget and inbox. You get a weekly report with every ticket.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" id="faq">
+  <div class="wrap faq-grid">
+    <div class="head">
+      <span class="tag">FAQ</span>
+      <h2>Questions agency owners ask</h2>
+      <p class="lede">Still unsure? Book a call and we'll walk through your account.</p>
+    </div>
+    <div class="faq">
+      <details open><summary>Will my clients know you're a separate company?</summary><p>No. We reply under your agency name, from your support inbox and chat widget, following a playbook we write together.</p></details>
+      <details><summary>How do you access our HighLevel account?</summary><p>You add our team as agency users and choose their permissions. You can remove access at any time, and every action is visible in your audit logs.</p></details>
+      <details><summary>Are you affiliated with HighLevel?</summary><p>No. We're an independent team working inside your agency account. HighLevel's own support still covers platform outages and your agency billing.</p></details>
+      <details><summary>Can you fix A2P registrations that were already rejected?</summary><p>Yes. Most rejections come from mismatched opt-in language, missing privacy policy terms or vague use-case descriptions. We fix the forms and site copy, then resubmit.</p></details>
+      <details><summary>Can I order a service without a subscription?</summary><p>Yes. Every service is available on-demand as a custom request. On-demand rates are higher than plan rates, and subscribers get most services included, so a plan is the better value if you need help every month.</p></details>
+      <details><summary>What if I go over my sub-account limit?</summary><p>We keep supporting every account that month and let you know. If you stay over, we'll suggest the next plan. No surprise overage fees.</p></details>
+      <details><summary>Is there a contract?</summary><p>Monthly plans are month to month with 30 days' notice. Annual plans are paid up front and include two months free.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="wrap">
+    <div>
+      <span class="tag">Get started</span>
+      <h2>Hand off support this week.</h2>
+      <p>Book a free 20-minute audit. We'll review your agency account, show you what's costing you time and recommend a plan.</p>
+    </div>
+    <div class="contact">
+      <div class="crow"><span class="k">Email</span><b id="c-email">hello@synctech.support</b><button class="copy" type="button" data-copy="c-email">Copy</button></div>
+      <div class="crow"><span class="k">Phone</span><b id="c-phone">(555) 014-2280</b><button class="copy" type="button" data-copy="c-phone">Copy</button></div>
+      <a class="btn btn-primary" href="#contact">Book your free audit <svg><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 SyncTech. Independent support for HighLevel agencies.</span>
+    <span>HighLevel and GoHighLevel are trademarks of HighLevel Inc. Not affiliated with or endorsed by HighLevel.</span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== Lead capture settings =====
+   LEAD_WEBHOOK_URL: paste the URL of a HighLevel workflow "Inbound Webhook" trigger.
+   Each sign-up is sent as first_name, email, source and consent, so the workflow can
+   create the contact, tag it "a2p-checklist" and send the follow-up email.
+   CHECKLIST_PDF_URL: optional link to a hosted PDF (for example in your HighLevel media
+   library). A "Download PDF" button appears after unlock only when this is set. */
+var LEAD_WEBHOOK_URL = '';
+var CHECKLIST_PDF_URL = '';
+
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* Mobile menu */
+  var menuBtn = $('#menuBtn'), nav = $('#nav');
+  function closeMenu() { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  menuBtn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  $$('#nav a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+
+  /* Rotating word with typing effect */
+  var words = ['live chat', 'tech fixes', 'onboarding', 'social media', 'A2P approvals', 'custom builds'];
+  var rot = $('#rot'), wi = 0;
+  function typeWord(w, done) {
+    var i = 0;
+    (function step() { rot.textContent = w.slice(0, ++i); if (i < w.length) setTimeout(step, 55); else done(); })();
+  }
+  function eraseWord(done) {
+    (function step() { var t = rot.textContent; if (t.length) { rot.textContent = t.slice(0, -1); setTimeout(step, 30); } else done(); })();
+  }
+  function cycle() {
+    setTimeout(function () {
+      if (document.hidden) return cycle();
+      eraseWord(function () { wi = (wi + 1) % words.length; typeWord(words[wi], cycle); });
+    }, 2200);
+  }
+  if (!reduce) cycle();
+
+  /* Live example feed */
+  var samples = [
+    ['Summit Law', 'Workflow trigger repaired', 'ok', 'FIXED'],
+    ['Coastal Realty', 'Chat answered: pipeline stages', 'info', 'CHAT'],
+    ['Evergreen Pest', 'Number ported to LC Phone', 'warn', 'PHONE'],
+    ['Vita Chiro', 'Sub-account onboarded', 'ok', 'ONBOARD'],
+    ['Apex Auto', 'Mailgun domain verified', 'ok', 'FIXED'],
+    ['Bloom Florals', 'Review-request flow live', 'info', 'SOCIAL'],
+    ['Harbor Dental', 'A2P brand approved', 'ok', 'A2P'],
+    ['Nova Fitness', 'Funnel build delivered', 'info', 'BUILD'],
+    ['Keystone Plumbing', 'Calendar sync fixed', 'ok', 'FIXED']
+  ];
+  var feed = $('#feed'), resolved = $('#resolved'), si = 0, clock = 21 * 60 + 44;
+  function tick() {
+    if (document.hidden) return;
+    var s = samples[si++ % samples.length];
+    clock += 2 + Math.floor(Math.random() * 5);
+    var hh = String(Math.floor(clock / 60) % 24).padStart(2, '0'), mm = String(clock % 60).padStart(2, '0');
+    var li = document.createElement('li');
+    li.className = 'new';
+    li.innerHTML = '<time>' + hh + ':' + mm + '</time><span class="txt"><b></b> · <span></span></span><span class="lvl ' + s[2] + '">' + s[3] + '</span>';
+    li.querySelector('b').textContent = s[0];
+    li.querySelector('.txt span').textContent = s[1];
+    feed.insertBefore(li, feed.firstChild);
+    while (feed.children.length > 5) feed.removeChild(feed.lastChild);
+    if (s[2] === 'ok') resolved.textContent = String(+resolved.textContent + 1);
+  }
+  setInterval(tick, reduce ? 6000 : 2800);
+
+  /* Service tabs */
+  var tabs = $$('.tab');
+  function selectTab(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab, p = document.getElementById(t.getAttribute('aria-controls'));
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      p.hidden = !on;
+      p.classList.toggle('show', on);
+    });
+    if (focus) tab.focus();
+    if (window.innerWidth <= 960) tab.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reduce ? 'auto' : 'smooth' });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { selectTab(t); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key, n = null;
+      if (k === 'ArrowDown' || k === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      if (k === 'ArrowUp' || k === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (k === 'Home') n = tabs[0];
+      if (k === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); selectTab(n, true); }
+    });
+  });
+
+  /* Billing toggle */
+  var mode = 'm', billM = $('#billM'), billA = $('#billA');
+  function setBilling(m) {
+    mode = m;
+    billM.setAttribute('aria-pressed', m === 'm' ? 'true' : 'false');
+    billA.setAttribute('aria-pressed', m === 'a' ? 'true' : 'false');
+    $$('.amount b').forEach(function (el) { el.textContent = '$' + el.dataset[m]; });
+    $$('.billed').forEach(function (el) { el.textContent = el.dataset[m]; });
+    recommend();
+  }
+  billM.addEventListener('click', function () { setBilling('m'); });
+  billA.addEventListener('click', function () { setBilling('a'); });
+
+  /* Plan finder */
+  var subs = $('#subs'), subsOut = $('#subsOut');
+  var plans = {
+    starter: { name: 'Starter', m: '$297', a: '$248' },
+    growth: { name: 'Growth', m: '$697', a: '$581' },
+    scale: { name: 'Scale', m: '$1,497', a: '$1,248' }
+  };
+  function checked(id) { return document.getElementById(id).checked; }
+  function recommend() {
+    var n = +subs.value;
+    subsOut.textContent = n >= 60 ? '60+' : String(n);
+    var why = [], tier = 'starter';
+    if (n > 30) { tier = 'scale'; why.push('Unlimited sub-accounts for your ' + (n >= 60 ? '60+' : n)); }
+    if (checked('n-247')) { tier = 'scale'; why.push('24/7 live chat coverage'); }
+    if (checked('n-fast')) { tier = 'scale'; why.push('1-hour priority technical response'); }
+    if (checked('n-am')) { tier = 'scale'; why.push('Dedicated account manager'); }
+    if (tier !== 'scale') {
+      if (n > 10) { tier = 'growth'; why.push('Covers up to 30 sub-accounts'); }
+      if (checked('n-evening')) { tier = 'growth'; why.push('Chat 7 days a week, 8am–10pm'); }
+      if (checked('n-social')) { tier = 'growth'; why.push('Social media for 3 clients'); }
+      if (checked('n-build')) { tier = 'growth'; why.push('3 custom build hours each month'); }
+    } else {
+      if (checked('n-social')) why.push('Social media for 10 clients');
+      if (checked('n-build')) why.push('10 custom build hours each month');
+    }
+    if (tier === 'starter') why.push('Covers up to 10 sub-accounts', 'Weekday chat and next-day tech fixes');
+    var p = plans[tier];
+    $('#recName').firstChild.nodeValue = p.name;
+    $('#recPrice').textContent = p[mode] + '/mo';
+    var ul = $('#recWhy'); ul.innerHTML = '';
+    why.slice(0, 4).forEach(function (w) { var li = document.createElement('li'); li.textContent = w; ul.appendChild(li); });
+    $$('.tier').forEach(function (t) {
+      var on = t.dataset.tier === tier;
+      t.classList.toggle('pick', on);
+      $('.badge.you', t).hidden = !on;
+      var pop = $('.badge.pop', t); if (pop) pop.hidden = on;
+    });
+    $('#recBtn').setAttribute('href', '#tiers');
+  }
+  subs.addEventListener('input', recommend);
+  $$('.opts input').forEach(function (c) { c.addEventListener('change', recommend); });
+  recommend();
+
+  /* On-demand request builder */
+  var odRows = $$('.od-row'), BUILD_SUB = 95;
+  var odPlans = [
+    { name: 'Starter', price: 297, onb: 2, soc: 0, a2p: 3, build: 0 },
+    { name: 'Growth', price: 697, onb: 5, soc: 3, a2p: Infinity, build: 3 },
+    { name: 'Scale', price: 1497, onb: Infinity, soc: 10, a2p: Infinity, build: 10 }
+  ];
+  function fmt(n) { return '$' + n.toLocaleString('en-US'); }
+  function odState() {
+    var q = {}, items = [], total = 0;
+    odRows.forEach(function (r) {
+      var n = +$('output', r).textContent, cost = n * +r.dataset.price;
+      q[r.dataset.id] = n;
+      if (n > 0) { items.push({ name: r.dataset.name, n: n, cost: cost }); total += cost; }
+    });
+    return { q: q, items: items, total: total };
+  }
+  function odUpdate() {
+    var s = odState(), lines = $('#odLines');
+    lines.innerHTML = '';
+    odRows.forEach(function (r) {
+      var n = +$('output', r).textContent;
+      r.classList.toggle('on', n > 0);
+      $('[data-d="-1"]', r).disabled = n <= 0;
+    });
+    s.items.forEach(function (it) {
+      var li = document.createElement('li');
+      li.innerHTML = '<span></span><span></span>';
+      li.firstChild.textContent = it.n + ' × ' + it.name;
+      li.lastChild.textContent = fmt(it.cost);
+      lines.appendChild(li);
+    });
+    if (!s.items.length) lines.innerHTML = '<li class="empty">Add a service to build your request.</li>';
+    $('#odTotal').textContent = fmt(s.total);
+
+    var best = null, q = s.q;
+    odPlans.forEach(function (p) {
+      if (q.onb > p.onb || q.soc > p.soc || q.a2p > p.a2p) return;
+      var c = p.price + Math.max(0, q.build - p.build) * BUILD_SUB;
+      if (!best || c < best.cost) best = { name: p.name, cost: c };
+    });
+    var box = $('#odCompare');
+    box.hidden = !s.total;
+    if (!s.total) return;
+    if (best && best.cost < s.total) {
+      box.className = 'od-compare';
+      box.innerHTML = 'The same work on the <b></b> plan costs <b></b>/mo. You\'d save <b></b>.';
+      var bs = box.querySelectorAll('b');
+      bs[0].textContent = best.name; bs[1].textContent = fmt(best.cost); bs[2].textContent = fmt(s.total - best.cost);
+    } else {
+      box.className = 'od-compare neutral';
+      box.innerHTML = 'On-demand works well for a one-off. If you need help every month, <b>plans start at $297/mo</b> and include these services at lower rates.';
+    }
+  }
+  odRows.forEach(function (r) {
+    $$('.stepper button', r).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var o = $('output', r), step = +(r.dataset.step || 1);
+        o.textContent = Math.max(0, +o.textContent + (+b.dataset.d) * step);
+        odUpdate();
+      });
+    });
+  });
+  odUpdate();
+  $('#odCopy').addEventListener('click', function () {
+    var s = odState();
+    if (!s.items.length) { showToast('Add a service first'); return; }
+    var text = 'Custom request\n' + s.items.map(function (it) { return '- ' + it.n + ' × ' + it.name + ': ' + fmt(it.cost); }).join('\n') + '\nEstimated total: ' + fmt(s.total);
+    try {
+      navigator.clipboard.writeText(text).then(function () { showToast('Request copied. Paste it in your email to us'); }, function () { showToast('Copy blocked. Select the summary to copy it'); });
+    } catch (e) { showToast('Copy blocked. Select the summary to copy it'); }
+  });
+
+  /* A2P checklist: email gate, progress, copy */
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+  var ck = $('#checklist'), ckBoxes = $$('#checklist input[type="checkbox"]');
+  var leadForm = $('#leadForm'), lfEmail = $('#lf-email'), lfName = $('#lf-name'), lfConsent = $('#lf-consent');
+  var lfError = $('#lfError'), lfSubmit = $('#lfSubmit');
+
+  function ckProgress() {
+    var done = ckBoxes.filter(function (b) { return b.checked; }).length;
+    $('#ckCount').textContent = done + ' / ' + ckBoxes.length;
+    $('#ckBar').style.width = (done / ckBoxes.length * 100) + '%';
+    var saved = {}; ckBoxes.forEach(function (b) { if (b.checked) saved[b.dataset.k] = 1; });
+    store.set('st-a2p-checks', JSON.stringify(saved));
+  }
+  function unlock(scroll) {
+    ck.dataset.locked = 'false';
+    $('#ckGroups').removeAttribute('inert');
+    leadForm.hidden = true;
+    $('#lfDone').hidden = false;
+    if (CHECKLIST_PDF_URL) { var dl = $('#ckDownload'); dl.href = CHECKLIST_PDF_URL; dl.hidden = false; }
+    store.set('st-a2p-unlocked', '1');
+    if (scroll) ck.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+  }
+  try {
+    var savedChecks = JSON.parse(store.get('st-a2p-checks') || '{}');
+    ckBoxes.forEach(function (b) { b.checked = !!savedChecks[b.dataset.k]; });
+  } catch (e) {}
+  ckBoxes.forEach(function (b) { b.addEventListener('change', ckProgress); });
+  ckProgress();
+  if (store.get('st-a2p-unlocked') === '1') unlock(false);
+
+  $('#ckLockBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    leadForm.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+    setTimeout(function () { lfEmail.focus({ preventScroll: true }); }, reduce ? 0 : 400);
+  });
+
+  leadForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = lfEmail.value.trim();
+    lfEmail.removeAttribute('aria-invalid');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      lfEmail.setAttribute('aria-invalid', 'true');
+      lfError.textContent = 'Enter a valid email address, like you@youragency.com.';
+      lfEmail.focus();
+      return;
+    }
+    if (!lfConsent.checked) {
+      lfError.textContent = 'Tick the box to agree to receive the checklist by email.';
+      lfConsent.focus();
+      return;
+    }
+    lfError.textContent = '';
+    lfSubmit.disabled = true;
+    lfSubmit.firstChild.nodeValue = 'Unlocking… ';
+    var send = Promise.resolve();
+    if (LEAD_WEBHOOK_URL) {
+      var body = new URLSearchParams({ first_name: lfName.value.trim(), email: email, source: 'a2p-checklist', consent: 'yes', page: location.href.split('#')[0] });
+      send = Promise.race([
+        fetch(LEAD_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: body }),
+        new Promise(function (r) { setTimeout(r, 5000); })
+      ]).catch(function (err) { console.warn('Lead webhook failed', err); });
+    }
+    send.then(function () { unlock(true); showToast('Checklist unlocked'); });
+  });
+
+  $('#ckCopy').addEventListener('click', function () {
+    var text = 'A2P 10DLC approval checklist (SyncTech)\n';
+    $$('#checklist .ck-group').forEach(function (g) {
+      text += '\n' + $('h4', g).textContent + '\n';
+      $$('.ck-item', g).forEach(function (it) {
+        text += ($('input', it).checked ? '[x] ' : '[ ] ') + $('b', it).textContent + ': ' + $('small', it).textContent + '\n';
+      });
+    });
+    try {
+      navigator.clipboard.writeText(text).then(function () { showToast('Checklist copied'); }, function () { showToast('Copy blocked by the browser'); });
+    } catch (e) { showToast('Copy blocked by the browser'); }
+  });
+
+  /* Copy buttons */
+  var toast = $('#toast'), tt;
+  function showToast(msg) { toast.textContent = msg; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('on'); }, 1800); }
+  $$('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var el = document.getElementById(b.dataset.copy), text = el.textContent;
+      function fallback() { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); showToast('Selected. Press Ctrl+C to copy'); }
+      try {
+        navigator.clipboard.writeText(text).then(function () { b.textContent = 'Copied'; showToast('Copied ' + text); setTimeout(function () { b.textContent = 'Copy'; }, 1500); }, fallback);
+      } catch (e) { fallback(); }
+    });
+  });
+})();
+</script>
+
+</html>
